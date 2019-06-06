@@ -17,7 +17,7 @@ v1.0, 2019-05-23: SNAPSHOT
 
 image::github-search.png[]
 
-https://github.com/search?l=JavaScript&q=qrcode&type=Repositories[github地址]
+https://github.com/search?l=JavaScript&q=qrcode&type=Repositories[github地址^]
 
 经过挨个挑选查看后，发现以下两个组件是满足需求的：
 
@@ -91,12 +91,12 @@ image::web-success.png[]
 image::wechat-error.png[]
 
 看起来应该是没有调起摄像头，
-但根据``LazarSoft/jsqrcode``提供的 https://qrsnapper.com/[示例]是可以的：
+但根据``LazarSoft/jsqrcode``提供的 https://qrsnapper.com/[示例^]是可以的：
 
 image::demo-success.png[]
 
 === 手机调试以上错误
-参考 https://www.cnblogs.com/xy-nb/p/web.html[手机web前端调试页面的几种方式]
+参考 https://www.cnblogs.com/xy-nb/p/web.html[手机web前端调试页面的几种方式^]
 
 在手机google浏览器下访问，出现以下错误：
 
@@ -107,6 +107,7 @@ image::WX20190605-173340@2x.png[]
 在Firefox下访问，可以正常使用。
 
 那么``navigator.mediaDevices``的使用场景是怎么样的呢？
+
 分析发现，需要https的域名或者是localhost，才有值。
 
 

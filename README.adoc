@@ -1,0 +1,127 @@
+= WEB二维码扫描
+peacetrue
+v1.0, 2019-05-23: SNAPSHOT
+:doctype: docbook
+:toc: left
+:numbered:
+:imagesdir: assets/images
+:sourcedir: ../src/main/java
+:resourcesdir: ../src/main/resources
+:testsourcedir: ../src/test/java
+:source-highlighter: coderay
+:coderay-linenums-mode: inline
+
+通过浏览器页面实现二维码扫描识别。
+
+== 查找学习资料
+
+image::github-search.png[]
+
+https://github.com/search?l=JavaScript&q=qrcode&type=Repositories[github地址]
+
+经过挨个挑选查看后，发现以下两个组件是满足需求的：
+
+LazarSoft/jsqrcode::
+js二维码扫描的核心组件，根据图片解析出内容。
+PaulKinlan/qrcode::
+基于``LazarSoft/jsqrcode``提供前端扫描支持。
+
+== LazarSoft/jsqrcode
+克隆其源码到本地进行模拟。
+按照文档说明编译后的结构如下：
+
+image::jsqrcode.png[]
+
+=== 在Intellij中运行
+直接在Intellij下运行``dist/index.html``，
+发现有很多错误：
+
+image::intellij-run.png[]
+
+=== 本地打开
+直接把``dist/index.html``拖拽到浏览器中，
+发现还是有很多错误：
+
+image::local-run.png[]
+
+=== 部署到nginx
+添加配置``/usr/local/etc/nginx/servers/qrcode.conf``：
+
+[source%nowrap,nginx]
+----
+server {
+    listen       8040;
+    server_name  localhost;
+    root /Users/xiayx/Documents/Projects/source/PaulKinlan/qrcode/dist;
+    location / {
+        #root   /Users/xiayx/Documents/Company/aum/aum-detection/docs/qrcode;
+        index  index.html index.htm;
+    }
+}
+----
+
+访问**http://192.168.1.48:8040/**，发现页面不能正常展示：
+
+image::nginx-run.png[]
+
+=== 处理上面的错误
+NOTE:: Failed to load module script: The server responded with a non-JavaScript MIME type of "application/octet-stream". Strict MIME type checking is enforced for module scripts per HTML spec.
+
+在 https://stackoverflow.com/search?q=Failed%20to%20load%20module%20script[Stack Overflow]上没有找到合适的答案，
+自己逐步分析和尝试。
+
+格式化``dist/index.html``，修改``main.mjs``
+----
+<!--<script src=/scripts/main.mjs type=module></script>--> <1>
+<script src=/scripts/main.mjs defer></script>              <2>
+----
+<1> 原代码
+<2> 修改后的代码
+
+再次访问后，成功了：
+
+image::web-success.png[]
+
+=== 通过手机访问
+将手机和电脑连接至同一WIFI，
+访问电脑的IP地址``http://192.168.1.48:8040/``。
+
+在微信环境下访问，不能成功展示：
+
+image::wechat-error.png[]
+
+看起来应该是没有调起摄像头，
+但根据``LazarSoft/jsqrcode``提供的 https://qrsnapper.com/[示例]是可以的：
+
+image::demo-success.png[]
+
+=== 手机调试以上错误
+参考 https://www.cnblogs.com/xy-nb/p/web.html[手机web前端调试页面的几种方式]
+
+在手机google浏览器下访问，出现以下错误：
+
+image::WX20190605-173340@2x.png[]
+
+因为``navigator.mediaDevices``不存在，导致了异常。
+
+在Firefox下访问，可以正常使用。
+
+那么``navigator.mediaDevices``的使用场景是怎么样的呢？
+分析发现，需要https的域名或者是localhost，才有值。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
